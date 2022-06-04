@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="fourthproject.snapfood.Controller.LoginController"
+            prefHeight="400.0" prefWidth="600.0">
+    <HBox layoutX="161.0" layoutY="266.0" prefHeight="39.0" prefWidth="260.0" spacing="61.0">
+        <CheckBox fx:id="checkBox" mnemonicParsing="false" text="Remember Me" textFill="#d8d9db">
+            <HBox.margin>
+                <Insets top="8.0"/>
+            </HBox.margin>
+        </CheckBox>
+        <Button fx:id="signInBTN" mnemonicParsing="false" onAction="#loginAction" prefHeight="24.0" prefWidth="76.0"
+                style="-fx-background-color: white;" styleClass="signInBTN">
+            <HBox.margin>
+                <Insets top="6.0"/>
+            </HBox.margin>
+            <graphic>
+                <ImageView fitHeight="27.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+    <VBox layoutX="161.0" layoutY="117.0" prefHeight="136.0" prefWidth="260.0">
+        <children>
+            <VBox prefHeight="57.0" prefWidth="189.0" spacing="7.0">
+                <children>
+                    <Label fx:id="userLBL" text="username" textFill="#d8d9db" />
+                    <TextField fx:id="userTXT" styleClass="userTXT" />
+                </children>
+            </VBox>
+            <VBox prefHeight="57.0" prefWidth="189.0" spacing="7.0">
+                <children>
+                    <Label fx:id="passwordLBL" text="passwrod" textFill="#d8d9db" />
+                    <PasswordField fx:id="passwordTXT" />
+                </children>
+            </VBox>
+            <Hyperlink alignment="BOTTOM_RIGHT" onAction="#forgetPassAction" text="Forgot Password?">
+                <VBox.margin>
+                    <Insets left="134.0" />
+                </VBox.margin>
+            </Hyperlink>
+        </children>
+    </VBox>
+    <Hyperlink layoutX="250.0" layoutY="318.0" onAction="#newUserAction" text="New User ?" />
+    <Label fx:id="loginLBL" layoutX="161.0" layoutY="78.0" text="Login">
+        <font>
+            <Font name="System Bold" size="20.0" />
+        </font>
+    </Label>
+</AnchorPane>
