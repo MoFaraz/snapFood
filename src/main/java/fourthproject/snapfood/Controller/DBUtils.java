@@ -1,8 +1,11 @@
 package fourthproject.snapfood.Controller;
 
 
+import fourthproject.snapfood.Exception.PlaceNotFound;
 import fourthproject.snapfood.Model.Customer;
+import fourthproject.snapfood.Model.FoodCategory;
 import fourthproject.snapfood.Model.Person;
+import fourthproject.snapfood.Model.Place;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 
@@ -37,7 +40,7 @@ public class DBUtils {
                 alert.show();
             } else {
                 password = PasswordToHash.toHash(password);
-                psInsert = connection.prepareStatement("INSERT INTO data (email,password) VALUES (?,?)");
+                psInsert = connection.prepareStatement("INSERT INTO person (email,password) VALUES (?,?)");
                 psInsert.setString(1, email);
                 psInsert.setString(2, password);
                 psInsert.executeUpdate();
@@ -46,29 +49,7 @@ public class DBUtils {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (psCheckUserExist != null) {
-                try {
-                    psCheckUserExist.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (psInsert != null) {
-                try {
-                    psInsert.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(psInsert, psCheckUserExist, resultSet);
         }
     }
 
@@ -211,6 +192,123 @@ public class DBUtils {
         }
         return "";
 
+    }
+
+    public static void insertToPlace (Place newPlace) {
+        Connection connection = null;
+        PreparedStatement psInsert;
+
+        try {
+
+            psInsert = connection.prepareStatement("INSERT INTO place (name,address,type) VALUES (?,?,?)");
+            psInsert.setString(1, newPlace.getName());
+            psInsert.setString(2, newPlace.getAddress());
+            if (newPlace.getFoodCategory().getFoodCategory() == FoodCategory.foodCategory.RESTURANT)
+                psInsert.setInt(3,1);
+            else
+                psInsert.setInt(3 , 2);
+            psInsert.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void insertToFoodCategory (Place newPlace) {
+        Connection connection = null;
+        PreparedStatement psInsert = null;
+        PreparedStatement psCheckUserExist = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+            psCheckUserExist = connection.prepareStatement("SELECT * FROM place WHERE name = ?");
+            psCheckUserExist.setString(1, newPlace.getName());
+            resultSet = psCheckUserExist.executeQuery();
+
+            if (!resultSet.isBeforeFirst()) {
+                throw new PlaceNotFound("There Is No Place With This Name");
+            } else {
+                int placeId;
+                placeId = resultSet.getInt("id");
+                psInsert = connection.prepareStatement("INSERT INTO foodCategory (name,placeId) VALUES (?,?)");
+                psInsert.setString(1, newPlace.getFoodCategory().getName());
+                psInsert.setInt(2, placeId);
+                psInsert.executeUpdate();
+            }
+
+        } catch (SQLException | PlaceNotFound e) {
+            e.printStackTrace();
+        } finally {
+            close(psInsert, psCheckUserExist, resultSet);
+        }
+    }
+
+    public static void insertToItem (Place newPlace) {
+        Connection connection = null;
+        PreparedStatement psInsert = null;
+        PreparedStatement psCheckUserExist = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+            psCheckUserExist = connection.prepareStatement("SELECT * FROM foodCategory WHERE name = ?");
+            psCheckUserExist.setString(1, newPlace.getFoodCategory().getName());
+            resultSet = psCheckUserExist.executeQuery();
+
+            if (!resultSet.isBeforeFirst()) {
+                throw new PlaceNotFound("There Is No Food Category With This Name");
+            } else {
+                int foodCategoryId;
+                foodCategoryId = resultSet.getInt("id");
+                psInsert = connection.prepareStatement("INSERT INTO item (name,price,foodCategoryId) VALUES (?,?,?)");
+                for (int i = 0 ; i < newPlace.getFoodCategory().getItems().size() ; i++){
+                    psInsert.setString(1 , newPlace.getFoodCategory().getItems().get(i).getName());
+                    psInsert.setString(2 , newPlace.getFoodCategory().getItems().get(i).getPrice());
+                    psInsert.setInt(3 , foodCategoryId);
+                    psInsert.executeUpdate();
+                }
+
+            }
+
+        } catch (SQLException | PlaceNotFound e) {
+            e.printStackTrace();
+        } finally {
+            close(psInsert, psCheckUserExist, resultSet);
+        }
+    }
+    private static void close(PreparedStatement psInsert, PreparedStatement psCheckUserExist, ResultSet resultSet) {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (psCheckUserExist != null) {
+            try {
+                psCheckUserExist.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (psInsert != null) {
+            try {
+                psInsert.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

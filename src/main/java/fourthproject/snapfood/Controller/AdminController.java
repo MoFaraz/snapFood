@@ -2,6 +2,7 @@ package fourthproject.snapfood.Controller;
 
 import fourthproject.snapfood.Main;
 import fourthproject.snapfood.Model.FoodCategory;
+import fourthproject.snapfood.Model.Place;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +26,7 @@ public class AdminController {
     @FXML private CheckBox cafeCheckBox;
     @FXML private TextField categoryNameFLD;
     @FXML private CheckBox resturanCheckBox;
+    @FXML private TextField placeFLD;
 
     @FXML void addAction(ActionEvent event) {
 
@@ -33,9 +35,12 @@ public class AdminController {
     @FXML
     void addCategoryItemAction(ActionEvent event) {
         if (!categoryNameFLD.getText().isEmpty() &&
-           ((resturanCheckBox.isSelected() && cafeCheckBox.isSelected()) ||
-           (!resturanCheckBox.isSelected() && !cafeCheckBox.isSelected()))){
-            var foodCategories = new ArrayList<FoodCategory>();
+            !placeFLD.getText().isEmpty() )
+           /*((resturanCheckBox.isSelected() && cafeCheckBox.isSelected()) ||
+           (!resturanCheckBox.isSelected() && !cafeCheckBox.isSelected())))*/{
+
+            var newPlace = new Place();
+            newPlace.setName(placeFLD.getText());
             var newFoodCategory = new FoodCategory();
             newFoodCategory.setName(categoryNameFLD.getText());
             if (resturanCheckBox.isSelected())
@@ -44,7 +49,7 @@ public class AdminController {
                 newFoodCategory.setFoodCategory(FoodCategory.foodCategory.CAFE);
 
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("View/Request.fxml"));
+            loader.setLocation(Main.class.getResource("View/AddCategoryItemPage.fxml"));
             try {
                 loader.load();
             } catch (IOException e) {
@@ -54,7 +59,7 @@ public class AdminController {
             getAdminStage().setResizable(false);
             AddCategoryItemController controller = loader.getController();
             controller.setAddCategoryItemStage(adminStage);
-
+            controller.setNewPlace(newPlace);
         }
     }
 

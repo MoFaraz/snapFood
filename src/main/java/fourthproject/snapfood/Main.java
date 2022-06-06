@@ -1,5 +1,6 @@
 package fourthproject.snapfood;
 
+import fourthproject.snapfood.Controller.AdminController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,10 +11,14 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/LoginPage.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("View/AdminPage.fxml"));
+
+        loader.load();
+
+        AdminController controller = loader.getController();
+        controller.setAdminStage(stage);
+
+        stage.setScene(new Scene(loader.getRoot()));
         stage.show();
     }
 

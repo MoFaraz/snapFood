@@ -44,7 +44,7 @@ public class LoginController{
     void loginAction(ActionEvent event) {
         if (DBUtils.logInUser(event,userTXT.getText(),passwordTXT.getText())) {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("View/ChatPage.fxml"));
+            loader.setLocation(Main.class.getResource("View/.fxml"));
             try {
                 loader.load();
             } catch (IOException e) {
