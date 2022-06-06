@@ -1,52 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="fourthproject.snapfood.Controller.SignUpController"
-            prefHeight="400.0" prefWidth="600.0">
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fourthproject.snapfood.Controller.SignUpController">
     <children>
-        <VBox layoutX="170.0" layoutY="64.0" prefHeight="229.0" prefWidth="260.0">
+        <VBox layoutX="170.0" layoutY="108.0" prefHeight="172.0" prefWidth="260.0">
             <children>
                 <VBox prefHeight="57.0" prefWidth="189.0" spacing="7.0">
                     <children>
-                        <Label fx:id="userLBL" text="username" textFill="#d8d9db" />
-                        <TextField fx:id="userTXT" styleClass="userTXT" />
-                    </children>
-                </VBox>
-                <VBox prefHeight="57.0" prefWidth="189.0" spacing="7.0">
-                    <children>
-                        <Label fx:id="passwordLBL" text="passwrod" textFill="#d8d9db" />
-                        <PasswordField fx:id="passwordTXT" />
-                    </children>
-                </VBox>
-                <VBox prefHeight="54.0" prefWidth="260.0" spacing="7.0">
-                    <children>
-                        <VBox prefHeight="57.0" prefWidth="189.0" spacing="7.0">
-                            <children>
-                                <Label fx:id="passwordLBL1" text="confirm passwrod" textFill="#d8d9db" />
-                                <PasswordField fx:id="conPassFLD" />
-                            </children>
-                        </VBox>
-                        <Label fx:id="emailLBL" text="Email" textFill="#d8d9db" />
-                        <TextField fx:id="emailFLD" styleClass="userTXT" />
+                      <VBox prefHeight="54.0" prefWidth="260.0" spacing="7.0">
+                          <children>
+                              <VBox prefHeight="57.0" prefWidth="189.0" spacing="7.0">
+                                  <children>
+                                      <Label text="email" textFill="#d8d9db" />
+                                      <PasswordField fx:id="emailFLD" />
+                                  </children>
+                              </VBox>
+                              <Label text="password" textFill="#d8d9db" />
+                              <TextField fx:id="passFLD" styleClass="userTXT" />
+                          </children>
+                      </VBox>
+                        <Label text="confirm password" textFill="#d8d9db" />
+                        <PasswordField fx:id="conPassFLd" />
                     </children>
                 </VBox>
             </children>
         </VBox>
-        <Label fx:id="signUpLBL" layoutX="170.0" layoutY="27.0" text="SignUp">
+        <Label layoutX="170.0" layoutY="73.0" text="SignUp">
             <font>
                 <Font name="System Bold" size="20.0" />
             </font>
         </Label>
-        <Button fx:id="signUpBTN" layoutX="314.0" layoutY="305.0" mnemonicParsing="false" onAction="#signUpAction" prefHeight="24.0" prefWidth="116.0" styleClass="signInBTN" stylesheets="@../LoginPage.css" text="SignUp" />
-        <Button fx:id="backBTN" layoutX="170.0" layoutY="305.0" mnemonicParsing="false" onAction="#backBTNAction" prefHeight="24.0" prefWidth="116.0" styleClass="signInBTN" stylesheets="@../LoginPage.css" text="Back" />
+        <Button fx:id="signUpBTN" layoutX="314.0" layoutY="305.0" mnemonicParsing="false" onAction="#signUpAction" prefHeight="24.0" prefWidth="116.0" text="SignUp" />
+        <Button fx:id="backBTN" layoutX="170.0" layoutY="305.0" mnemonicParsing="false" onAction="#backBTNAction" prefHeight="24.0" prefWidth="116.0" text="Back" />
     </children>
 
 </AnchorPane>

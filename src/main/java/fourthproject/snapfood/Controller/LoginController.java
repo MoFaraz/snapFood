@@ -13,42 +13,70 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class LoginController{
 
-    @FXML
-    private CheckBox checkBox;
+          private Stage loginPage;
+    @FXML private CheckBox checkBox;
+    @FXML private Label loginLBL;
+    @FXML private Label passwordLBL;
+    @FXML private PasswordField passwordTXT;
+    @FXML private Button signInBTN;
+    @FXML private Label userLBL;
+    @FXML private TextField userTXT;
 
-    @FXML
-    private Label loginLBL;
-
-    @FXML
-    private Label passwordLBL;
-
-    @FXML
-    private PasswordField passwordTXT;
-
-    @FXML
-    private Button signInBTN;
-
-    @FXML
-    private Label userLBL;
-
-    @FXML
-    private TextField userTXT;
-
-    @FXML
-    void forgetPassAction(ActionEvent event) {
-
+    @FXML void forgetPassAction(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("View/ForgetPass.fxml"));
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        getLoginPage().setScene(new Scene(loader.getRoot()));
+        getLoginPage().setResizable(false);
+       /* ForgetPassController controller = loader.getController();
+        controller.initFunction6(loginPage);*/
     }
 
     @FXML
     void loginAction(ActionEvent event) {
+        if (DBUtils.logInUser(event,userTXT.getText(),passwordTXT.getText())) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("View/ChatPage.fxml"));
+            try {
+                loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            getLoginPage().setScene(new Scene(loader.getRoot()));
+            getLoginPage().setResizable(false);
+        }
 
     }
 
     @FXML
     void newUserAction(ActionEvent event) {
-
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("View/SignUpPage.fxml"));
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        getLoginPage().setScene(new Scene(loader.getRoot()));
+        getLoginPage().setResizable(false);
+        SignUpController signUpController = loader.getController();
+        signUpController.initFunction2(loginPage);
     }
 
+    public void initFunction (Stage loginPage) {
+        this.loginPage = loginPage;
+    }
+
+    public Stage getLoginPage() {
+        return loginPage;
+    }
 }

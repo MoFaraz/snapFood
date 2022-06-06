@@ -4,11 +4,13 @@ public class FoodCategory {
 
     private String name;
     private String id;
+    private foodCategory foodCategory;
 
-    enum foodCategory{
+    public enum foodCategory{
       RESTURANT,
       CAFE
     }
+
 
     public String getName() {
         return name;
@@ -18,5 +20,19 @@ public class FoodCategory {
         return id;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public FoodCategory.foodCategory getFoodCategory() {
+        return foodCategory;
+    }
+
+    public void setFoodCategory(FoodCategory.foodCategory foodCategory) {
+        this.foodCategory = foodCategory;
+    }
 }
