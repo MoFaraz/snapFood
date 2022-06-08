@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="472.0" prefWidth="274.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="fourthproject.snapfood.Controller.PersonController">
+    <left>
+        <HBox prefHeight="400.0" prefWidth="278.0" BorderPane.alignment="CENTER">
+            <children>
+                <VBox prefHeight="400.0" prefWidth="61.0" styleClass="dark-gray-background" stylesheets="@../CSS/style.css">
+                    <children>
+                        <Pane prefHeight="231.0" prefWidth="59.0" />
+                        <Button fx:id="friendsRequestBTN" mnemonicParsing="false" prefHeight="24.0" prefWidth="34.0" style="-fx-background-color: #46474A;">
+                            <graphic>
+                                <ImageView fitHeight="36.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../image/friends.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <VBox.margin>
+                                <Insets left="7.0" />
+                            </VBox.margin>
+                        </Button>
+                        <Button fx:id="addMoneyBTN" mnemonicParsing="false" prefHeight="24.0" prefWidth="34.0" style="-fx-background-color: #46474A;">
+                            <graphic>
+                                <ImageView fitHeight="36.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../image/addMoney.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <VBox.margin>
+                                <Insets left="7.0" top="28.0" />
+                            </VBox.margin>
+                        </Button>
+                  <Label fx:id="inventoryLBL" text="10000">
+                     <VBox.margin>
+                        <Insets left="6.0" top="4.0" />
+                     </VBox.margin>
+                  </Label>
+                        <Pane prefHeight="259.0" prefWidth="59.0" />
+                        <Button fx:id="logoutBTN" mnemonicParsing="false" prefHeight="24.0" prefWidth="34.0" style="-fx-background-color: #46474A;">
+                            <graphic>
+                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../image/icons8-retirement-50.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="7.0" />
+                            </VBox.margin>
+                        </Button>
+                    </children>
+                </VBox>
+                <VBox prefHeight="472.0" prefWidth="221.0" styleClass="gray-background" stylesheets="@../CSS/style.css">
+                    <children>
+                        <HBox fx:id="searchFLD" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="175.0" stylesheets="@../CSS/style.css">
+                            <VBox.margin>
+                                <Insets left="5.0" right="5.0" top="10.0" />
+                            </VBox.margin>
+                            <children>
+                                <ImageView fitHeight="25.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../image/magnifying-glass.png" />
+                                    </image>
+                                    <HBox.margin>
+                                        <Insets left="6.0" right="5.0" top="3.0" />
+                                    </HBox.margin>
+                                </ImageView>
+                                <TextField prefHeight="24.0" prefWidth="111.0" promptText="search" styleClass="transparent-background" stylesheets="@../CSS/style.css">
+                                    <HBox.margin>
+                                        <Insets top="4.0" />
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                            <styleClass>
+                                <String fx:value="dark-gray-background" />
+                                <String fx:value="radius" />
+                            </styleClass>
+                        </HBox>
+                        <Line endX="115.0" startX="-100.0">
+                            <VBox.margin>
+                                <Insets top="8.0" />
+                            </VBox.margin>
+                        </Line>
+                  <VBox fx:id="personVbox" prefHeight="424.0" prefWidth="217.0" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </left>
+</BorderPane>
