@@ -26,21 +26,21 @@ public class AddMoneyController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        backBTN.setOnAction(event -> {
-            loadPersonPage();
-        });
-
-        inventoryLBL.setText(String.valueOf(customer.getInventory()));
-
         increaseBTN.setOnAction(event -> {
             if (isEmpty()) {
                 customer.setInventory(Integer.parseInt(increaseFLD.getText()) + customer.getInventory());
+                DBUtils.increaseInventory(customer.getInventory() , customer.getId());
                 inventoryLBL.setText(String.valueOf(customer.getInventory()));
+                increaseFLD.clear();
             }
+        });
+
+        backBTN.setOnAction(event -> {
+            loadPersonPage(customer);
         });
     }
 
-    private void loadPersonPage (){
+    private void loadPersonPage (Customer customer){
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("View/PersonPage.fxml"));
         try {
             loader.load();
@@ -49,6 +49,10 @@ public class AddMoneyController implements Initializable {
         }
         Stage stage = (Stage) backBTN.getScene().getWindow();
         stage.setScene(new Scene(loader.getRoot()));
+
+        PersonController controller = loader.getController();
+        controller.initPage(customer);
+        controller.setInventoryLBL(customer.getInventory());
     }
 
     private boolean isEmpty () {
@@ -57,5 +61,9 @@ public class AddMoneyController implements Initializable {
 
     public void initPage (Customer customer) {
         this.customer = customer;
+    }
+
+    public void setInventoryLBL (int inventory) {
+        inventoryLBL.setText(String.valueOf(inventory));
     }
 }

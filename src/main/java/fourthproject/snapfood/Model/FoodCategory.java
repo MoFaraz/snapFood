@@ -7,9 +7,9 @@ public class FoodCategory {
     private String name;
     private String id;
     private ArrayList<Item> items;
-    private foodCategory foodCategory;
+    private type foodCategory;
 
-    public enum foodCategory{
+    public enum type {
       RESTURANT,
       CAFE
     }
@@ -39,11 +39,11 @@ public class FoodCategory {
         this.items = items;
     }
 
-    public FoodCategory.foodCategory getFoodCategory() {
+    public type getFoodCategory() {
         return foodCategory;
     }
 
-    public void setFoodCategory(FoodCategory.foodCategory foodCategory) {
+    public void setFoodCategory(type foodCategory) {
         this.foodCategory = foodCategory;
     }
 }

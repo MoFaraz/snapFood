@@ -6,7 +6,17 @@ public class Place {
     private String name;
     private FoodCategory foodCategory;
 
+    public Place (String address){
+        setAddress(address);
+    }
 
+    public FoodCategory getFoodCategory() {
+        return foodCategory;
+    }
+
+    public void setFoodCategory(FoodCategory foodCategory) {
+        this.foodCategory = foodCategory;
+    }
 
     public String getAddress() {
         return address;
@@ -22,13 +32,5 @@ public class Place {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public FoodCategory getFoodCategory() {
-        return foodCategory;
-    }
-
-    public void setFoodCategory(FoodCategory foodCategory) {
-        this.foodCategory = foodCategory;
     }
 }

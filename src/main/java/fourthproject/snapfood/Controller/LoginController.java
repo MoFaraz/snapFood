@@ -1,82 +1,91 @@
 package fourthproject.snapfood.Controller;
 
 import fourthproject.snapfood.Main;
-import javafx.application.Application;
+import fourthproject.snapfood.Model.Customer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class LoginController{
+public class LoginController implements Initializable {
 
-          private Stage loginPage;
+          private Customer customer;
     @FXML private CheckBox checkBox;
-    @FXML private Label loginLBL;
-    @FXML private Label passwordLBL;
-    @FXML private PasswordField passwordTXT;
+    @FXML private PasswordField passFLD;
     @FXML private Button signInBTN;
-    @FXML private Label userLBL;
-    @FXML private TextField userTXT;
+    @FXML private TextField userFLD;
+    @FXML private Hyperlink newUserHLink;
+    @FXML private Hyperlink forgetPassHLink;
 
-    @FXML void forgetPassAction(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("View/ForgetPass.fxml"));
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        newUserHLink.setOnAction(event -> {
+            loadSignUpPage();
+        });
+
+        signInBTN.setOnAction(event -> {
+            customer = login(event , userFLD , passFLD);
+            if (customer != null)
+                loadPersonPage(customer);
+        });
+
+        forgetPassHLink.setOnAction(event -> {
+            loadForgetPassPage();
+        });
+    }
+
+
+
+    private void loadSignUpPage (){
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("View/SignUpPage.fxml"));
         try {
             loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        getLoginPage().setScene(new Scene(loader.getRoot()));
-        getLoginPage().setResizable(false);
-       /* ForgetPassController controller = loader.getController();
-        controller.initFunction6(loginPage);*/
+
+        Stage stage = (Stage) signInBTN.getScene().getWindow();
+        stage.setScene(new Scene(loader.getRoot()));
+        stage.setResizable(false);
     }
 
-    @FXML
-    void loginAction(ActionEvent event) {
-        if (DBUtils.logInUser(event,userTXT.getText(),passwordTXT.getText())) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("View/.fxml"));
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            getLoginPage().setScene(new Scene(loader.getRoot()));
-            getLoginPage().setResizable(false);
-        }
-
-    }
-
-    @FXML
-    void newUserAction(ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("View/SignUpPage.fxml"));
+    private void loadPersonPage (Customer customer) {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("View/PersonPage.fxml"));
         try {
             loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        getLoginPage().setScene(new Scene(loader.getRoot()));
-        getLoginPage().setResizable(false);
-        SignUpController signUpController = loader.getController();
-        signUpController.initFunction2(loginPage);
+
+        Stage stage = (Stage) signInBTN.getScene().getWindow();
+        stage.setScene(new Scene(loader.getRoot()));
+
+        PersonController controller = loader.getController();
+        controller.initPage(customer);
+        controller.setInventoryLBL(customer.getInventory());
     }
 
-    public void initFunction (Stage loginPage) {
-        this.loginPage = loginPage;
+    private void loadForgetPassPage () {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("View/ForgetPassPage.fxml"));
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = (Stage) forgetPassHLink.getScene().getWindow();
+        stage.setScene(new Scene(loader.getRoot()));
+        stage.setResizable(false);
     }
 
-    public Stage getLoginPage() {
-        return loginPage;
+    private Customer login (ActionEvent event , TextField username , TextField password) {
+       return DBUtils.logInUser(event,username.getText(),password.getText());
     }
+
 }

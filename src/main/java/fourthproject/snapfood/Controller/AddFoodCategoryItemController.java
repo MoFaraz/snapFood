@@ -1,10 +1,8 @@
 package fourthproject.snapfood.Controller;
 
 import fourthproject.snapfood.Main;
-import fourthproject.snapfood.Model.FoodCategory;
 import fourthproject.snapfood.Model.Item;
 import fourthproject.snapfood.Model.Place;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,7 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class AddCategoryItemController implements Initializable {
+public class AddFoodCategoryItemController implements Initializable {
 
           private ArrayList<Item> items = new ArrayList<>();
           private Place newPlace;

@@ -2,6 +2,7 @@ package fourthproject.snapfood.Controller;
 import fourthproject.snapfood.Main;
 import fourthproject.snapfood.Model.Customer;
 import fourthproject.snapfood.Model.Person;
+import fourthproject.snapfood.Model.Place;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,6 +27,7 @@ public class PersonController implements Initializable {
 
           private Customer customer;
           private ArrayList<Customer> customers = DBUtils.getAllCustomer();
+          private ArrayList<Place> places = DBUtils.getAllPlace();
           private ImageView imageView;
     @FXML private Button addMoneyBTN;
     @FXML private Button friendsRequestBTN;
@@ -33,21 +35,43 @@ public class PersonController implements Initializable {
     @FXML private VBox personVbox;
     @FXML private HBox searchFLD;
     @FXML private Label inventoryLBL;
+    @FXML private Button placeBTN;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        inventoryLBL.setText(String.valueOf(customer.getInventory()));
 
         addMoneyBTN.setOnAction(event -> {
             loadAddMoneyPage(customer);
         });
 
 
+        placeBTN.setOnAction(event -> {
+            if (places != null) {
+                personVbox.getChildren().clear();
+                for (Place place : places){
+                    imageView = new ImageView();
+                    HBox hBox = new HBox();
+                    hBox.setAlignment(Pos.CENTER_LEFT);
+                    Button userBTN = new Button(place.getAddress());
+                    userBTN.setStyle("-fx-background-color:  #636566;");
+                    hBox.setMargin(userBTN, new Insets(5, 0, 0, 6));
+                    File file = new File("src/main/resources/fourthproject/snapfood/image/store.png");
+                    Image image = new Image(file.toURI().toString());
+                    imageView.setImage(image);
+                    imageView.setFitWidth(38);
+                    imageView.setFitHeight(37);
+                    hBox.setMargin(imageView, new Insets(8, 0, 0, 5));
+
+
+                    hBox.getChildren().addAll(imageView, userBTN);
+                    personVbox.getChildren().add(hBox);
+                }
+            }
+        });
 
         friendsRequestBTN.setOnAction(event -> {
-
+            personVbox.getChildren().clear();
             if (customers != null)
                 for (Customer newCustomer : customers) {
                     if (newCustomer == customer)
@@ -101,9 +125,14 @@ public class PersonController implements Initializable {
 
         AddMoneyController controller = loader.getController();
         controller.initPage(customer);
+        controller.setInventoryLBL(customer.getInventory());
     }
 
     public void initPage (Customer customer) {
         this.customer = customer;
+    }
+
+    public void setInventoryLBL(int inventory) {
+        inventoryLBL.setText(String.valueOf(inventory));
     }
 }

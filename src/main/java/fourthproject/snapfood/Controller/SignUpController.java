@@ -38,10 +38,7 @@ public class SignUpController {
             e.printStackTrace();
         }
 
-        getSignUpStage().setScene(new Scene(loader.getRoot()));
-        getSignUpStage().setResizable(false);
-        LoginController loginController = loader.getController();
-        loginController.initFunction(signUpStage);
+
     }
 
     @FXML

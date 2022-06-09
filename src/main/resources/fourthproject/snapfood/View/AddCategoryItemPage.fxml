@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="297.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fourthproject.snapfood.Controller.AddCategoryItemController">
+<AnchorPane prefHeight="297.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fourthproject.snapfood.Controller.AddFoodCategoryItemController">
    <children>
       <VBox layoutX="49.0" layoutY="72.0" prefHeight="154.0" prefWidth="293.0" spacing="10.0">
          <children>
@@ -18,8 +18,8 @@
             <TextField fx:id="itemPriceFLD" />
             <HBox prefHeight="46.0" prefWidth="293.0" spacing="166.0">
                <children>
-                  <Button fx:id="backBTN" mnemonicParsing="false" onAction="#backAction" text="Back" />
-                  <Button fx:id="addItemBTN" mnemonicParsing="false" onAction="#addItemAction" text="Add Item" />
+                  <Button fx:id="backBTN" mnemonicParsing="false" text="Back" />
+                  <Button fx:id="addItemBTN" mnemonicParsing="false" text="Add Item" />
                </children>
                <VBox.margin>
                   <Insets top="5.0" />

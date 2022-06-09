@@ -2,10 +2,7 @@ package fourthproject.snapfood.Controller;
 
 
 import fourthproject.snapfood.Exception.PlaceNotFound;
-import fourthproject.snapfood.Model.Customer;
-import fourthproject.snapfood.Model.FoodCategory;
-import fourthproject.snapfood.Model.Person;
-import fourthproject.snapfood.Model.Place;
+import fourthproject.snapfood.Model.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 
@@ -53,17 +50,24 @@ public class DBUtils {
         }
     }
 
-    public static boolean logInUser(ActionEvent event, String email, String password) {
+    public static Customer logInUser(ActionEvent event, String email, String password) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
-            preparedStatement = connection.prepareStatement("SELECT password FROM person WHERE  email = ?");
+            preparedStatement = connection.prepareStatement("SELECT id,firstname,lastname,password,mobilePhone FROM person WHERE  email = ?");
             preparedStatement.setString(1, email);
             resultSet = preparedStatement.executeQuery();
 
+
+            Customer customer;
+            int id = 0;
+            int inventory = 0;
+            String firstname = null;
+            String lastname = null;
+            String mobilePhone = null;
             if (!resultSet.isBeforeFirst()) {
                 System.out.println("User not found in the database");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -72,36 +76,32 @@ public class DBUtils {
             } else {
                 while (resultSet.next()) {
                     String retrievedPassword = resultSet.getString("password");
-                    if (retrievedPassword.equals(PasswordToHash.toHash(password))) {
-                        PreparedStatement update = connection.prepareStatement("UPDATE person SET status = ? WHERE email = ?");
-                        update.setInt(1, 1);
-                        update.setString(2, email);
-                        update.executeUpdate();
-                        return true;
+                    if (retrievedPassword.equals(password)) {
+                        id = resultSet.getInt("id");
+                        firstname = resultSet.getString("firstname");
+                        lastname = resultSet.getString("lastname");
+                        mobilePhone = resultSet.getString("mobilePhone");
                     }
                 }
+
+                if (id == 0)
+                    return null;
+
+                preparedStatement = connection.prepareStatement("SELECT inventory FROM customer WHERE personId = ?");
+                preparedStatement.setInt(1 , id);
+                resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()){
+                    inventory = resultSet.getInt("inventory");
+                }
+
+                customer = new Customer(id , firstname , lastname ,password , email , mobilePhone , inventory);
+                return customer;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
-    }
-
-    public static void logout() {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
-
-            PreparedStatement update = connection.prepareStatement("UPDATE person SET status = ? WHERE ID = ?");
-            update.setInt(1, 0);
-            update.setInt(2, getOnlineID());
-            update.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        return null;
     }
 
     public static boolean findUser(String username) {
@@ -125,6 +125,162 @@ public class DBUtils {
         }
     }
 
+    public static ArrayList<Customer> getAllCustomer () {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        var customersId = new ArrayList<Customer>();
+
+        var customers = new ArrayList<Customer>();
+
+        Customer customer;
+        try {
+            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+            preparedStatement = connection.prepareStatement("SELECT personId,inventory FROM customer");
+            resultSet = preparedStatement.executeQuery();
+
+            int id;
+            int personId;
+            int inventory;
+            String firstname;
+            String lastname;
+            String password;
+            String email;
+            String mobilePhone;
+
+            while (resultSet.next()) {
+                personId = resultSet.getInt("personId");
+                inventory = resultSet.getInt("inventory");
+                customer = new Customer(personId , inventory);
+                customersId.add(customer);
+            }
+
+            preparedStatement = connection.prepareStatement("SELECT id , firstname , lastname , password , email , mobilePhone FROM person");
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                for (Customer value : customersId) {
+                    id = resultSet.getInt("id");
+                    if (id == value.getPersonId()) {
+                        firstname = resultSet.getString("firstname");
+                        lastname = resultSet.getString("lastname");
+                        password = resultSet.getString("password");
+                        email = resultSet.getString("email");
+                        mobilePhone = resultSet.getString("mobilePhone");
+
+                        customer = new Customer(id, firstname, lastname, password, email, mobilePhone, value.getInventory());
+                        customers.add(customer);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
+    }
+
+    public static ArrayList<Admin> getAllAdmin () {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        var adminId = new ArrayList<Admin>();
+
+        var admins = new ArrayList<Admin>();
+
+        Admin admin;
+        try {
+            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+            preparedStatement = connection.prepareStatement("SELECT personId,mainAdmin FROM admin");
+            resultSet = preparedStatement.executeQuery();
+
+            int id;
+            int personId;
+            int mainAdmin;
+            String firstname;
+            String lastname;
+            String password;
+            String email;
+            String mobilePhone;
+
+            while (resultSet.next()) {
+                personId = resultSet.getInt("personId");
+                mainAdmin = resultSet.getInt("mainAdmin");
+                if (mainAdmin == 1)
+                    admin = new Admin(personId , true);
+                else
+                    admin = new Admin(personId , false);
+
+                adminId.add(admin);
+            }
+
+            preparedStatement = connection.prepareStatement("SELECT id , firstname , lastname , password , email , mobilePhone FROM person");
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                for (Admin value : adminId) {
+                    id = resultSet.getInt("id");
+                    if (id == value.getPersonId()) {
+                        firstname = resultSet.getString("firstname");
+                        lastname = resultSet.getString("lastname");
+                        password = resultSet.getString("password");
+                        email = resultSet.getString("email");
+                        mobilePhone = resultSet.getString("mobilePhone");
+
+                        admin = new Admin(id,firstname,lastname,password,email,mobilePhone);
+                        admins.add(admin);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return admins;
+    }
+
+    public static ArrayList<Place> getAllPlace () {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        var places = new ArrayList<Place>();
+
+        Place place;
+        try {
+            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+            preparedStatement = connection.prepareStatement("SELECT address FROM place");
+            resultSet = preparedStatement.executeQuery();
+
+            String address;
+            while (resultSet.next()) {
+                address = resultSet.getString("address");
+                place = new Place(address);
+                places.add(place);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return places;
+
+    }
+
+    public static void increaseInventory (int inventory , int id) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        
+        try {
+            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+            preparedStatement = connection.prepareStatement("UPDATE customer SET inventory = ? WHERE personId = ?");
+            preparedStatement.setInt(1, inventory);
+            preparedStatement.setInt(2 , id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static int getUserID(String username) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -134,28 +290,6 @@ public class DBUtils {
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
             preparedStatement = connection.prepareStatement("SELECT ID FROM data WHERE  username = ?");
             preparedStatement.setString(1, username);
-            resultSet = preparedStatement.executeQuery();
-            if (!resultSet.isBeforeFirst()) {
-                System.out.println("UserNot Found");
-            } else {
-                while (resultSet.next()) {
-                    return resultSet.getInt("ID");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    public static int getOnlineID() {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
-            preparedStatement = connection.prepareStatement("SELECT ID FROM data WHERE  status = 1");
             resultSet = preparedStatement.executeQuery();
             if (!resultSet.isBeforeFirst()) {
                 System.out.println("UserNot Found");
@@ -199,14 +333,9 @@ public class DBUtils {
         PreparedStatement psInsert;
 
         try {
-
-            psInsert = connection.prepareStatement("INSERT INTO place (name,address,type) VALUES (?,?,?)");
+            connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+            psInsert = connection.prepareStatement("INSERT INTO place (address) VALUES (?)");
             psInsert.setString(1, newPlace.getName());
-            psInsert.setString(2, newPlace.getAddress());
-            if (newPlace.getFoodCategory().getFoodCategory() == FoodCategory.foodCategory.RESTURANT)
-                psInsert.setInt(3,1);
-            else
-                psInsert.setInt(3 , 2);
             psInsert.executeUpdate();
         }
         catch (SQLException e) {
@@ -222,7 +351,7 @@ public class DBUtils {
         }
     }
 
-    public static void insertToFoodCategory (Place newPlace) {
+    public static void insertToFoodCategory (String name , boolean type) {
         Connection connection = null;
         PreparedStatement psInsert = null;
         PreparedStatement psCheckUserExist = null;
@@ -230,21 +359,23 @@ public class DBUtils {
 
         try {
             connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
-            psCheckUserExist = connection.prepareStatement("SELECT * FROM place WHERE name = ?");
-            psCheckUserExist.setString(1, newPlace.getName());
+            psCheckUserExist = connection.prepareStatement("SELECT * FROM foodCategory WHERE name = ?");
+            psCheckUserExist.setString(1, name);
             resultSet = psCheckUserExist.executeQuery();
 
-            if (!resultSet.isBeforeFirst()) {
-                throw new PlaceNotFound("There Is No Place With This Name");
+            if (resultSet.isBeforeFirst()) {
+                throw new PlaceNotFound("There Is Already A Food Category With This Name");
             } else {
-                int placeId;
-                placeId = resultSet.getInt("id");
-                psInsert = connection.prepareStatement("INSERT INTO foodCategory (name,placeId) VALUES (?,?)");
-                psInsert.setString(1, newPlace.getFoodCategory().getName());
-                psInsert.setInt(2, placeId);
+            while (resultSet.next()) {
+                psInsert = connection.prepareStatement("INSERT INTO foodCategory (name,type) VALUES (?,?)");
+                psInsert.setString(1, name);
+                if (type) //RESTAURANT
+                    psInsert.setInt(2, 1);
+                else //CAFE
+                    psInsert.setInt(2 , 2);
                 psInsert.executeUpdate();
+                }
             }
-
         } catch (SQLException | PlaceNotFound e) {
             e.printStackTrace();
         } finally {
@@ -267,14 +398,16 @@ public class DBUtils {
             if (!resultSet.isBeforeFirst()) {
                 throw new PlaceNotFound("There Is No Food Category With This Name");
             } else {
-                int foodCategoryId;
-                foodCategoryId = resultSet.getInt("id");
-                psInsert = connection.prepareStatement("INSERT INTO item (name,price,foodCategoryId) VALUES (?,?,?)");
-                for (int i = 0 ; i < newPlace.getFoodCategory().getItems().size() ; i++){
-                    psInsert.setString(1 , newPlace.getFoodCategory().getItems().get(i).getName());
-                    psInsert.setString(2 , newPlace.getFoodCategory().getItems().get(i).getPrice());
-                    psInsert.setInt(3 , foodCategoryId);
-                    psInsert.executeUpdate();
+                while (resultSet.next()) {
+                    int foodCategoryId;
+                    foodCategoryId = resultSet.getInt("id");
+                    psInsert = connection.prepareStatement("INSERT INTO item (name,price,foodCategoryId) VALUES (?,?,?)");
+                    for (int i = 0; i < newPlace.getFoodCategory().getItems().size(); i++) {
+                        psInsert.setString(1, newPlace.getFoodCategory().getItems().get(i).getName());
+                        psInsert.setString(2, newPlace.getFoodCategory().getItems().get(i).getPrice());
+                        psInsert.setInt(3, foodCategoryId);
+                        psInsert.executeUpdate();
+                    }
                 }
 
             }
@@ -285,6 +418,7 @@ public class DBUtils {
             close(psInsert, psCheckUserExist, resultSet);
         }
     }
+
     private static void close(PreparedStatement psInsert, PreparedStatement psCheckUserExist, ResultSet resultSet) {
         if (resultSet != null) {
             try {

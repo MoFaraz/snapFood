@@ -12,14 +12,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fourthproject.snapfood.Controller.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="fourthproject.snapfood.Controller.LoginController">
     <HBox layoutX="161.0" layoutY="266.0" prefHeight="39.0" prefWidth="260.0" spacing="61.0">
         <CheckBox fx:id="checkBox" mnemonicParsing="false" text="Remember Me" textFill="#d8d9db">
             <HBox.margin>
                 <Insets top="8.0" />
             </HBox.margin>
         </CheckBox>
-        <Button fx:id="signInBTN" mnemonicParsing="false" onAction="#loginAction" prefHeight="21.0" prefWidth="76.0" styleClass="signInBTN" text="Login">
+        <Button fx:id="signInBTN" mnemonicParsing="false" prefHeight="21.0" prefWidth="76.0" styleClass="signInBTN" text="Login">
             <HBox.margin>
                 <Insets top="6.0" />
             </HBox.margin>
@@ -29,25 +29,25 @@
         <children>
             <VBox prefHeight="57.0" prefWidth="189.0" spacing="7.0">
                 <children>
-                    <Label fx:id="userLBL" text="email" textFill="#d8d9db" />
-                    <TextField fx:id="userTXT" styleClass="userTXT" />
+                    <Label  text="email" textFill="#d8d9db" />
+                    <TextField fx:id="userFLD" />
                 </children>
             </VBox>
             <VBox prefHeight="57.0" prefWidth="189.0" spacing="7.0">
                 <children>
-                    <Label fx:id="passwordLBL" text="passwrod" textFill="#d8d9db" />
-                    <PasswordField fx:id="passwordTXT" />
+                    <Label text="passwrod" textFill="#d8d9db" />
+                    <PasswordField fx:id="passFLD" />
                 </children>
             </VBox>
-            <Hyperlink alignment="BOTTOM_RIGHT" onAction="#forgetPassAction" text="Forgot Password?">
+            <Hyperlink alignment="BOTTOM_RIGHT" fx:id="forgetPassHLink" text="Forgot Password?">
                 <VBox.margin>
                     <Insets left="134.0" />
                 </VBox.margin>
             </Hyperlink>
         </children>
     </VBox>
-    <Hyperlink layoutX="250.0" layoutY="318.0" onAction="#newUserAction" text="New User ?" />
-    <Label fx:id="loginLBL" layoutX="161.0" layoutY="78.0" text="Login">
+    <Hyperlink layoutX="250.0" layoutY="318.0" fx:id="newUserHLink" text="New User ?" />
+    <Label layoutX="161.0" layoutY="78.0" text="Login">
         <font>
             <Font name="System Bold" size="20.0" />
         </font>
